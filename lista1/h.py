@@ -73,9 +73,10 @@ if "estrutura" in string_fase1.lower():
         timer += 60
         perigo += 50
 
-perigo = abs(perigo)
+if perigo < 0:
+    perigo = 0
 
-if perigo < 100:
+if perigo <= 100:
     print(f"Byte: Ufa, finalmente acabei, demorei apenas {timer} minutos, vamos ao Nether!")
     
     #segunda fase
@@ -106,13 +107,18 @@ if perigo < 100:
             timer += 20
         elif float(resultado_blaze) > 12:
             timer += 10
+        else:
+            timer += 30
+            perigo += 40
     else:
         timer += 30
         perigo += 40
     
-    perigo = abs(perigo)
+    if perigo < 0:
+        perigo = 0
+        
     #terceira fase
-    if perigo < 100:
+    if perigo <= 100:
         perigo -= 20
         x = int(input())
         z = int(input())
@@ -120,30 +126,37 @@ if perigo < 100:
         print(f"Byte: Estou a {int(dist)} blocos da Stronghold!")
         timer += dist * 2
 
-        perigo = abs(perigo)
-        if perigo < 100:
-            print("Byte desbloqueou a conquista: [É o fim?]")
-            perigo += 30
+        if perigo < 0:
+            perigo = 0
+            
+        if perigo <= 100: 
             if timer > 300:
                 print("Troia desbloqueou a conquista: [Liberte o End]")
+                print("Byte desbloqueou a conquista: [É o fim?]")
+                perigo += 30
+                troia = True
             elif 180 <= timer <= 300:
-                print("Troia desbloqueou a conquista: [É o fim?]")
+                perigo += 30
                 if camas: #não vai desbloquear liberte o end
+                    print("Byte desbloqueou a conquista: [É o fim?]")
                     print("Byte: Como eu amo o [Design Intencional do Jogo]!")
                     perigo -= 30
+                    pegouOvo = True
                 else:
+                    troia = True
+                    print("Troia desbloqueou a conquista: [É o fim?]")
+                    print("Byte desbloqueou a conquista: [É o fim?]")
                     perigo += 10
                     n_flechas = int(input())
                     n_alvos = int(input())
                     divisao = n_flechas/n_alvos
                     
-                    if n_alvos == 1:
-                        print("Byte: Troia já destruiu todos os cristais, agora é só o Dragão...")
-                    if n_alvos == 1 and n_flechas ==1:
+                    if n_alvos == 1 and n_flechas == 1:
                         print("Byte: Uma flecha, Uma chance.")
+                    elif n_alvos == 1:
+                        print("Byte: Troia já destruiu todos os cristais, agora é só o Dragão...")
                     
                     if divisao > 0 and divisao == int(divisao):
-                        troia = True
                         print("Byte desbloqueou a conquista: [Liberte o End]")
                         pegouOvo = True
                         timer += 10
@@ -151,47 +164,54 @@ if perigo < 100:
                         print("Byte: Droga! Não tenha flechas suficientes, Troia vai ganhar...")
                         timer += 20
             elif timer < 180:
+                print("Byte desbloqueou a conquista: [É o fim?]")
+                perigo += 30
                 if camas:
                     print("Byte: Como eu amo o [Design Intencional do Jogo]!")
                     perigo -= 30
+                    pegouOvo = True
                 else:
                     print("Byte desbloqueou a conquista: [Liberte o End]")
                     timer += 5
                     pegouOvo = True
+            
+            if perigo > 100:
+                morto = True
+            
         else:
-            print("Byte foi morto.")
             morto = True
         
     else:
-        print("Byte foi morto.")
         morto = True
         
 else:
-    print("Byte foi morto.")
     morto = True
 
 if morto:
     print("Byte foi morto.")
 
-if pegouOvo:
+if pegouOvo and not morto:
     print("Byte desbloqueou a conquista: [A nova geração]")
     print("Byte: Aauauau! O ovo é meu! que rolem os créditos!")
 else:
     print("Byte: auu.... Não consegui pegar o ovo...")
 
 print("")
-print("🚨Avaliação de nível de perigo: ")
+
+avaliacao = ""
 
 if perigo == 100 or troia:
-    print("Odisseia de Byte.")
+    avaliacao = "Odisseia de Byte."
 elif perigo < 30:
-    print("Passeio no Parque.")
+   avaliacao = "Passeio no Parque."
 elif 30 <= perigo < 70:
-    print("Jornada Complicada.")
+    avaliacao = "Jornada Complicada."
 elif 70 <= perigo < 100:
-    print("Aventura Perigosa.")
+    avaliacao = "Aventura Perigosa."
 elif perigo > 100:
-    print("Letal.")
+    avaliacao = "Letal."
+
+print(f"🚨Avaliação de nível de perigo: {avaliacao}")
 
 print("")
 hora = int(timer/60)
