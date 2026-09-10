@@ -27,20 +27,20 @@ while missao_cumprida == False and falha == False:
     if missao_cumprida == False and falha == False: 
         acao = input()
         if acao == "SALTAR":
-            if salto == 1 and ano_atual == ano_origem:
-                falha = True
-                final = "duplicata"
             salto += 1
             anos_salto = int(input())
             custo_energia = int(input())
             rasgo_temporal += 10
             ano_atual += anos_salto
             energia -= custo_energia
-            print(f"WABAC saltou para o ano {ano_atual}!\nEnergia restante: {energia} | Rasgo Temporal:{rasgo_temporal}%")
-            
-            if ano_atual == ano_proibido:
+            if ano_atual == ano_origem or ano_atual == ano_proibido:
                 falha = True
                 final = "duplicata"
+            if ano_atual >= 2026 and pecas >= 3:
+                    missao_cumprida = True
+            
+            if not falha and energia > 0 and not missao_cumprida:
+                print(f"WABAC saltou para o ano {ano_atual}!\nEnergia restante: {energia} | Rasgo Temporal: {rasgo_temporal}%")
             
         elif acao == "CONSERTAR":
             dificuldade = int(input())
@@ -55,8 +55,9 @@ while missao_cumprida == False and falha == False:
             else:
                 energia -= 15
                 rasgo_temporal += 20
-                print('Mr. Peabody: "Tenha mais cuidado, Sherman! Essa falha desestabilizou o tempo!"')
-                print(f"Energia: {energia} | Rasgo Temporal: {rasgo_temporal}%")
+                if rasgo_temporal < 100:
+                    print('Mr. Peabody: "Tenha mais cuidado, Sherman! Essa falha desestabilizou o tempo!"')
+                    print(f"Energia: {energia} | Rasgo Temporal: {rasgo_temporal}%")
         elif acao == "AULA DE HISTÓRIA":
             energia += 25
             rasgo_temporal += 15
@@ -64,7 +65,8 @@ while missao_cumprida == False and falha == False:
             print(f"Energia recarregada para {energia}!")
         elif acao == "ABORTAR":
             falha = True
-            final == "aborto"
+            final = "aborto"
+            
         
 if falha:
     if final == "duplicata":
@@ -77,4 +79,4 @@ if falha:
         print("Mr. Peabody acionou o protocolo de parada manual.\nA viagem foi cancelada antes de sua conclusão.")
             
 else:
-    print(f"A WABAC emergiu com sucesso no ano de {ano_atual}!\nCom as 3 peças coletadas, Mr. Peabody selou o rasgo temporal e salvou o presente!")
+    print(f"A WABAC emergiu com sucesso no ano de {ano_atual}! Com as 3 peças coletadas, Mr. Peabody selou o rasgo temporal e salvou o presente!")
