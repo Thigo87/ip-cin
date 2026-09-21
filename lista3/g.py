@@ -75,19 +75,19 @@ for i in ameacas:
                 ranking[k],ranking[k + 1] = ranking[k + 1], ranking[k]
             elif ranking[k][1] == ranking[k + 1][1]:
                 if i[2] == "Força":
-                    if herois[k][1] < herois[k + 1][1]:
+                    if (herois[k][1] < herois[k + 1][1]) and (ranking[k][1] < ranking[k + 1][1]):
                         ranking[k],ranking[k + 1] = ranking[k + 1], ranking[k]
                 elif i[2] == "Resistência":
-                     if herois[k][2] < herois[k + 1][2]:
+                     if (herois[k][2] < herois[k + 1][2]) and (ranking[k][1] < ranking[k + 1][1]):
                         ranking[k],ranking[k + 1] = ranking[k + 1], ranking[k]
                 elif i[2] == "Velocidade":
-                     if herois[k][3] < herois[k + 1][3]:
+                     if (herois[k][3] < herois[k + 1][3]) and (ranking[k][1] < ranking[k + 1][1]):
                         ranking[k],ranking[k + 1] = ranking[k + 1], ranking[k]
                 elif i[2] == "Inteligência":
-                     if herois[k][4] < herois[k + 1][4]:
+                     if (herois[k][4] < herois[k + 1][4]) and (ranking[k][1] < ranking[k + 1][1]):
                         ranking[k],ranking[k + 1] = ranking[k + 1], ranking[k]
                 elif i[2] == "Experiência":
-                    if herois[k][5] < herois[k + 1][5]:
+                    if (herois[k][5] < herois[k + 1][5]) and (ranking[k][1] < ranking[k + 1][1]):
                         ranking[k],ranking[k + 1] = ranking[k + 1], ranking[k]
                         
     for j in range(0, len(ranking)):        
@@ -116,7 +116,7 @@ for i in ameacas:
         print("[ROBOT] Despachando todos os heróis disponíveis.")
         print("EQUIPE DESPACHADA:")
         for k in ranking:
-            print(f"> {i}")
+            print(f"> {k[0]}")
     else:
         print("[CECIL] Equipe selecionada para a missão.")
         print("EQUIPE DESPACHADA:")
