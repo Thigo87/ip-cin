@@ -1,15 +1,17 @@
-print("--- FASE 3: A MENSAGEM ---")
-alfabeto = "abcdefghijklmnopqrstuvwxyz "
-    
-mensagem_codificada = "0 8 6 52 18 28 14 26"
-mensagem = ""
-    
-mensagem_codificada = [int(char) for char in mensagem_codificada.split()]
-print(mensagem_codificada)
-mensagem_codificada = [alfabeto[(x // 2) % 27] if x % 2 == 0 else alfabeto[(x * 3 + 1) % 27] for x in mensagem_codificada]
+mapa = [[1,2,3],[4,5,6],[7,8,9]]
+novo_mapa = []
+for i in mapa:
+    print(i)
 
-print(mensagem_codificada)
+novo_mapa = []
 
-mensagem = "".join(mensagem_codificada)
+print("")
+
+for i in range(len(mapa)):
+    nova_linha = []
+    for j in mapa:
+        nova_linha.append(j[i])
+    novo_mapa.append(nova_linha)
         
-print(f'Mensagem decodificada: "{mensagem}"')
+for i in novo_mapa:
+    print(i)
