@@ -4,8 +4,6 @@ totens = []
 
 chefes = 0
 
-coeficiente_total = 0
-
 canideos = ["lobo", "coiote", "cachorro"]
 insetos = ["louva-a-deus", "abelha", "formiga"]
 aves = ["corvo", "urubu", "pardal"]
@@ -25,7 +23,7 @@ def montar_baralho(baralho):
 def itens_e_totens(item):
     totem = False
     
-    if item =="totem":
+    if item.lower() =="totem":
         totem = True
     
     if len(itens) < 3:
@@ -41,12 +39,13 @@ def itens_e_totens(item):
 def calculo_do_coeficiente_carta(carta):
     cartas_raras = ["urayuli", "louva-a-deus rei", "ameba", "tubarão", "urso"]
     coeficiente = 0
-    if "filhote de" in carta or "ovo de" in carta:
+    if "filhote de" in carta.lower() or "ovo de" in carta.lower():
         coeficiente += 5
     elif carta.lower() in cartas_raras:
         coeficiente += 20
     else:
-        coeficiente += 10
+        if "pele" not in carta.lower():
+            coeficiente += 10
 
     return coeficiente
 
@@ -61,7 +60,7 @@ def calculo_do_coeficiente_itens_e_totens(baralho, itens, totens):
         for char in item:
             coeficiente += 1 if char != ' ' else 0
     if len(totens) > 0:
-        totem_ativo = totens[::-1][0]
+        totem_ativo = totens[0]
     else:
         totem_ativo = "0"
     if totem_ativo.lower() == "canideos":
@@ -92,37 +91,37 @@ def calculo_do_coeficiente_itens_e_totens(baralho, itens, totens):
                         
     return coeficiente
        
-def simular_batalha(chefe, coeficiente, baralho):
+def simular_batalha(chefe, coeficiente, baralho, itens, totens):
     boss_hp = 0
     if chefe == "Garimpeiro":
         print("Garimpeiro - É o Garimpeiro! OPA!")
         coeficiente = coeficiente // 2
         boss_hp = 40
-        if coeficiente < boss_hp:
+        if coeficiente <= boss_hp:
             print("Garimpeiro - Mais ouro pra mim!") if coeficiente < boss_hp else print("Leshy - A fome se instala. Que lástima... chegou a hora da sua ruína.")
             return 0
         else:
             print("Garimpeiro - Oxe!")
-            return coeficiente - boss_hp
+            return coeficiente
     elif chefe == "Pescador":
         print("Pescador - Eu sou o Pescador. Quer pescar?")
-        if len(baralho) > 0:
-            coeficiente = coeficiente // len(baralho)
         boss_hp = 90
-        if coeficiente < boss_hp:
+        denominador = len(baralho)
+        boss_hp += coeficiente // denominador
+        if coeficiente <= boss_hp:
             print("Pescador - Hum. Vai pescar.") if coeficiente < boss_hp else print("Leshy - A fome se instala. Que lástima... chegou a hora da sua ruína.")
             return 0
         else:
             print("Pescador - Vai pescar...")
             return coeficiente
     elif chefe == "Comerciante":
+        boss_hp = 160
         print("Comerciante - Vamos negociar.")
         for carta in baralho:
-            if carta == "pele":
+            if "pele" in carta.lower():
                 boss_hp -= 10
                 coeficiente += 10
-        boss_hp = 160
-        if coeficiente < boss_hp:
+        if coeficiente <= boss_hp:
             print("Comerciante - Você vai virar uma pele deslumbrante.") if coeficiente < boss_hp else print("Leshy - A fome se instala. Que lástima... chegou a hora da sua ruína.")
             return 0
         else:
@@ -138,13 +137,16 @@ def inventario(itens):
 
 print("Leshy - Outro desafiante. Já faz tanto tempo...")
 #Matagal
+coeficiente_total = 0
 print("Leshy - O sol banha os abetos sonolentos, você adentrou o... matagal.")
 #montando o baralho
 processo = True
+counter = 0
 while processo:
+    counter += 1
     processo = montar_baralho(baralho)
-
-print(f"{len(baralho)} cartas foram adicionadas ao baralho")
+    
+print(f"{counter - 1} cartas foram adicionadas ao baralho")
 
 for carta in baralho:
     coeficiente_total += calculo_do_coeficiente_carta(carta)
@@ -160,20 +162,22 @@ print(f'Itens no inventario: {inventario(itens)}')
 if len(totens) > 0:
     totens = totens[::-1]
 coeficiente_total += calculo_do_coeficiente_itens_e_totens(baralho, itens, totens)
-batalha = simular_batalha("Garimpeiro", coeficiente_total, baralho)
-
+batalha = simular_batalha("Garimpeiro", coeficiente_total, baralho, itens, totens)
+coeficiente_total = batalha
 if batalha > 0:
-    baralho = []
     itens = []
     chefes += 1 
     #Charneca
+    coeficiente_total = 0
     print("Leshy - O ar úmido é tomado pelo cheiro fétido de mofo e morte, você caminha cautelosamente até entrar na... charneca.")
     #montando o baralho
     processo = True
+    counter = 0
     while processo:
+        counter += 1
         processo = montar_baralho(baralho)
     
-    print(f"{len(baralho)} cartas foram adicionadas ao baralho")
+    print(f"{counter - 1} cartas foram adicionadas ao baralho")
     
     for carta in baralho:
         coeficiente_total += calculo_do_coeficiente_carta(carta)
@@ -188,20 +192,22 @@ if batalha > 0:
     if len(totens) > 0:
         totens = totens[::-1]
     coeficiente_total += calculo_do_coeficiente_itens_e_totens(baralho, itens, totens)
-    batalha = simular_batalha("Pescador", coeficiente_total, baralho)
+    batalha = simular_batalha("Pescador", coeficiente_total, baralho, itens, totens)
     coeficiente_total = batalha
     if batalha > 0:
-        baralho = []
         itens = []
         chefes += 1
         #Linha de neve
+        coeficiente_total = 0
         print("Leshy - O alívio do ar fresco logo dá lugar a um arrepio álgido. Você escala até a... linha de neve.")
         #montando o baralho
         processo = True
+        counter = 0
         while processo:
+            counter += 1
             processo = montar_baralho(baralho)
-        
-        print(f"{len(baralho)} cartas foram adicionadas ao baralho")    
+            
+        print(f"{counter - 1} cartas foram adicionadas ao baralho")    
         
         for carta in baralho:
             coeficiente_total += calculo_do_coeficiente_carta(carta)
@@ -216,7 +222,7 @@ if batalha > 0:
         if len(totens) > 0:
             totens = totens[::-1]
         coeficiente_total += calculo_do_coeficiente_itens_e_totens(baralho, itens, totens)
-        batalha = simular_batalha("Comerciante", coeficiente_total, baralho)
+        batalha = simular_batalha("Comerciante", coeficiente_total, baralho, itens, totens)
         
         if batalha > 0:
             chefes += 1
