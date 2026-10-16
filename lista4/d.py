@@ -42,7 +42,7 @@ def calculo_base(mao, inventario):
     return chips, multiplicador_base
 
 def separacao_cartas(inventario):
-    curingas_base = ['Joker', 'Space Joker', 'Blueprint']   
+    curingas_base = ['Joker', 'Space Joker', 'Blueprint', 'Chicot']   
     arcanos_base = ['Tolo', 'Hierofante', 'Justiça', 'Força']
     
     curingas_presentes = []
@@ -52,6 +52,9 @@ def separacao_cartas(inventario):
             curingas_presentes.append(item)
         elif item in arcanos_base:
             arcanos_presentes.append(item)
+
+    print(f"Curingas: {", ".join(curingas_presentes)}")
+    print(f"Arcanos: {", ".join(arcanos_presentes)}")
 
     return curingas_presentes, arcanos_presentes
 
@@ -75,6 +78,7 @@ def curinga(inventario, chips, multiplicador):
 
 def arcano(inventario, mao, multiplicador):
     _, arcanos_atualizados = separacao_cartas(inventario) #separando os arcanos
+    arcano_atual = arcanos_atualizados[0]
     if arcanos_atualizados[0] == "Tolo":
         arcanos_atualizados.pop(0)
         novo_arcano = input()
@@ -94,8 +98,10 @@ def arcano(inventario, mao, multiplicador):
         for i in range(0, len(mao)):
             if int(mao[i] ** 0.5 ) == mao[i] ** 0.5: #verificação dos quadrados perfeitos
                 multiplicador *= 1.1
+
+    print(f"Arcanos: {", ".join(arcanos_atualizados)}")
     
-    return multiplicador, mao
+    return multiplicador, mao, arcano_atual
 
 def pontuacao(mao, inventario):
     chips, multiplicador_base = calculo_base(mao, inventario)
@@ -113,15 +119,21 @@ def pontuacao(mao, inventario):
     return pontuacao_final
     
 
-def rodada(inventario):
+def rodada(inventario, troca):
+    troca = False
     mao = input()
     acao_jogador = input()
+    multiplicador = 1
     if acao_jogador == "Jogar":
-        pass
+        classificacao_mao = pontuacao(mao, inventario)
+        print(f"Classificação da mão: {classificacao_mao}")
     elif acao_jogador == "Trocar":
-        pass
+        troca = True
     elif acao_jogador == "Arcano":
-        pass
+        multiplicador, mao, arcano_atual = arcano(inventario, mao, multiplicador)
+
+
+    return troca
     
     
 
@@ -131,5 +143,13 @@ inventario = input()
 lista_inventario = inventario.replace("[", "]").replace("]", "").replace("'", "").split(", ")
 curingas, arcanos = separacao_cartas(lista_inventario)
 
+trocas_disponiveis = 4
+numero_mao_atual = 0
+troca = False
 
-rodada(lista_inventario)
+while trocas_disponiveis > 4 or numero_mao_atual < 4:
+    if troca:
+        trocas_disponiveis -= 1
+        troca = False
+    else:
+        troca = rodada(lista_inventario)
