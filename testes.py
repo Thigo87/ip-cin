@@ -1,0 +1,1 @@
+print("Benício, Wesley, Rodolfo, Ademir, "[:len()])
