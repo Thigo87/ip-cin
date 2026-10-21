@@ -12,8 +12,6 @@ disfarces = {}
 frase = input()
 letra_consulta = input()
 
-disfarce_padrao = {"variacao" : 0}
-
 for caractere in frase:#pegando a frase do usuario e vendo cada letra dela
 
     if caractere.isupper():
@@ -22,6 +20,11 @@ for caractere in frase:#pegando a frase do usuario e vendo cada letra dela
                 animagos[caractere.lower()] += 1
             else:
                 animagos.update({caractere.lower():1})
+            
+            if disfarces.get(caractere, False):
+                disfarces[caractere.lower()[caractere]] += 1
+            else:
+                disfarces.update({caractere.lower():{caractere : 1}})
 
         else:
             for item in variacoes:
@@ -30,6 +33,8 @@ for caractere in frase:#pegando a frase do usuario e vendo cada letra dela
                         animagos[caractere] += 1
                     else:
                         animagos.update({caractere:1})
+                    
+                    #Fazer a lógica do dicionário disfarces com os itens de variacoes
 
     else:
         if caractere in consoantes:
