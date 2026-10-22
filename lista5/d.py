@@ -7,90 +7,76 @@ variacoes = {
 }
 consoantes = "bcdfghjklmnpqrstvwxyz"
 animagos = {}
-disfarces = {}
 
 frase = input()
 letra_consulta = input()
 
-for caractere in frase:#pegando a frase do usuario e vendo cada letra dela
-
-    if caractere.isupper():
-        if caractere.lower() in consoantes:
-            if animagos.get(caractere.lower(), False):
-                animagos[caractere.lower()] += 1
+for letra in frase:
+    if letra in consoantes or letra in consoantes.upper():
+        if letra.lower() in animagos:
+            if letra in animagos[letra.lower()]:
+                animagos[letra.lower()][letra] += 1
             else:
-                animagos.update({caractere.lower():1})
-            
-            if disfarces.get(caractere, False):
-                disfarces[caractere.lower()[caractere]] += 1
-            else:
-                disfarces.update({caractere.lower():{caractere : 1}})
-
+                animagos[letra.lower()].update({letra : 1})
         else:
-            for item in variacoes:
-                if caractere in variacoes[item]:
-                    if animagos.get(caractere, False):
-                        animagos[caractere] += 1
-                    else:
-                        animagos.update({caractere:1})
-                    
-                    if disfarces.get(item, False):
-                        disfarces[caractere.lower()[caractere]] += 1
-                    else:
-                        disfarces.update({caractere.lower():{caractere : 1}})
-
+            animagos.update({letra.lower() : {letra : 1}})
     else:
-        if caractere in consoantes:
-            if animagos.get(caractere, False):
-                animagos[caractere] += 1
+        letra_real = ""
+        for vogal in variacoes:
+            if letra in variacoes[vogal]:
+                letra_real = vogal
+        if letra_real in variacoes:
+            if letra_real in animagos:
+                if letra in animagos[letra_real]:
+                    animagos[letra_real][letra] += 1
+                else:
+                    animagos[letra_real].update({letra : 1})
             else:
-                animagos.update({caractere:1})
-                
-            if disfarces.get(caractere.lower(), False):
-                print(disfarces[caractere.lower()][caractere])
-                
-            else:
-                disfarces.update({caractere.lower():{caractere : 1}})
+                animagos.update({letra_real : {letra : 1}})
 
-        else:
-            for item in variacoes:
-                if caractere in variacoes[item]:
-                    if animagos.get(caractere, False):
-                        animagos[caractere] += 1
-                    else:
-                        animagos.update({caractere:1})
-                        
-                    if disfarces.get(item, False):
-                        print(disfarces[caractere])
-                    else:
-                        disfarces.update({caractere.lower():{caractere : 1}})
-    lista_remocao = []
-    for item in animagos:
-        if animagos[item] == 0:
-            lista_remocao.append(item)
-    for item in lista_remocao:
-        del animagos[item]
+qntd_letras = []
 
-print(disfarces)
-
-letras = []
 for letra in animagos:
-    letras.append(f"{animagos[letra]}{letra}")
+    counter = 0
+    for disfarce in animagos[letra]:
+        counter += animagos[letra][disfarce]
 
-for i in range(len(letras) - 1):
-    for j in range(len(letras) - i - 1):
-        if letras[j][0] < letras[j + 1][0]:
-            letras[j], letras[j + 1] = letras[j + 1], letras[j]
+    qntd_letras.append(f"{counter}{letra}")
+
+for i in range(len(qntd_letras) - 1):
+    for j in range(len(qntd_letras) - i - 1):
+        num1 = ""
+        num2 = ""
+        for n in qntd_letras[j]:
+            if n.isnumeric():
+                num1 += n
+        for n in qntd_letras[j + 1]:
+            if n.isnumeric():
+                num2 += n
+        if int(num1) < int(num2):            
+            qntd_letras[j], qntd_letras[j + 1] = qntd_letras[j + 1], qntd_letras[j]
 
 frase = ""
-for letra in letras:
-    frase += f"{letra} "
+for qntd in qntd_letras:
+    frase += f"{qntd} "
+
+frase = frase[:len(frase) - 1]
+
+qntd_letra_escolhida = 0
+for disfarce in animagos[letra_consulta]:
+    qntd_letra_escolhida += animagos[letra_consulta][disfarce]
+
+qntd_variacoes = len(animagos[letra_consulta])
+
+variacao_frequente = ""
+qntd_variacao_frequente = 0
+
+for variacao in animagos[letra_consulta]:
+    if animagos[letra_consulta][variacao] > qntd_variacao_frequente:
+        qntd_variacao_frequente = animagos[letra_consulta][variacao]
+        variacao_frequente = variacao
 
 print(frase)
-
-total = 0
-for i in letras:
-    if letra_consulta in i:
-        total = int(i[0])
-
-print(f"Total de ocorrências: {total}")        
+print(f"Total de ocorrências: {qntd_letra_escolhida}")
+print(f"Quantidade de variações: {qntd_variacoes}")
+print(f"Variação mais frequente: {variacao_frequente} ({qntd_variacao_frequente})")
