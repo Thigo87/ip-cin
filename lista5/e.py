@@ -170,10 +170,11 @@ if len(INVENTÁRIO["magias"]) > 0: #verificando se há algum feitiço que ele ad
             print("Engraçado tentar parar um mestre das pás com neve, você se superou dessa vez!")
         
         else: #se não tiver
-            print("Que saco! Onde estão minhas outras pás?")
             INVENTÁRIO["nível"] -= 3
         
         if INVENTÁRIO["nível"] > 0: #verificando se está vivo
+            if len(INVENTÁRIO["itens"]["pás"]) < 3: #verificando se ele tá sem as pás necessárias
+                print("Que saco! Onde estão minhas outras pás?")
             print("")
             mapa_navio = {
                 (0, 4): "X",
@@ -217,11 +218,12 @@ if len(INVENTÁRIO["magias"]) > 0: #verificando se há algum feitiço que ele ad
                 while encantamento  != "Droga, não tenho mais nada de mana!":
                     encantamento = input()
                     if encantamento != "Droga, não tenho mais nada de mana!":
-                        print("Não posso recuar de jeito nenhum! Irei superar meus limites aqui e agora!")
                         lista_frase = encantamento.split()
                         if "morte" in lista_frase:
+                            print("Não posso recuar de jeito nenhum! Irei superar meus limites aqui e agora!")
                             INVENTÁRIO["nível"] -= 2
                         elif "magia" in lista_frase or "feitiço" in lista_frase:
+                            print("Não posso recuar de jeito nenhum! Irei superar meus limites aqui e agora!")
                             INVENTÁRIO["nível"] -= 1
                 
                 vivo = False
