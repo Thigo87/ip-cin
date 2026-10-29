@@ -1,38 +1,19 @@
-def movimentacao(mapa, posicao_atual): #função para movimentação pelo mapa
-    maior_valor = 0
-    proxima_posicao = [0, 0]
-    x, y = posicao_atual[0], posicao_atual[1] #separando as coordenadas
-
-    limites = len(mapa[0]) #definindo os limites do mapa
-
-    if 1 <= x:
-        if mapa[x - 1][y] > maior_valor:
-            maior_valor = mapa[x - 1][y]
-            proxima_posicao = [x - 1, y]
-    if limites - 1 > x:
-        if mapa[x + 1][y] > maior_valor:
-                    maior_valor = mapa[x + 1][y]
-                    proxima_posicao = [x + 1, y]
-
-    if 1 <= y:
-            if mapa[x][y - 1] > maior_valor:
-                maior_valor = mapa[x][y - 1]
-                proxima_posicao = [x, y - 1]
-    if limites - 1 > y:
-        if mapa[x][y + 1] > maior_valor:
-                    maior_valor = mapa[x][y + 1]
-                    proxima_posicao = [x, y + 1]
+d = {"um" : 1, "dois" : 2, "tres" : 3}
+l = []
+d_ajustado = {}
+for item in d:
+    l.append(d[item])
     
+n = len(l)
 
-    return proxima_posicao, maior_valor
+for i in range(n):
+    for j in range(n - i - 1):
+        if l[j] < l[j + 1]:
+            l[j], l[j + 1] = l[j + 1], l[j]
 
-posicao_atual = [0, 0]
-
-valor_posicao = 0
-mapa = [[0, 8], [4, 99]]
-
-while valor_posicao != 99:
-      print(posicao_atual)
-      posicao_atual, valor_posicao = movimentacao(mapa, posicao_atual)
-
-print(posicao_atual)
+for valor in l:
+    for item in d:
+        if valor == d[item]:
+            d_ajustado.update({item : valor})
+            
+print(d_ajustado)

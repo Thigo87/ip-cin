@@ -309,4 +309,37 @@ while valor_posicao != 99:
                     for item in mago["inventario"]:
                         item["poder"] *= multiplicador
                         
-#final boss        
+#final boss
+if personagens != []: #verificando se há personagens vivos
+    final_boss = {"hp" : 0, "ca" : 0}
+
+    HP_monstro, CA_monstro = input().split()
+    final_boss["hp"] = int(HP_monstro)
+    final_boss["ca"] = int(CA_monstro)
+    
+    ataques = {}
+    for aventureiro in range(len(personagens)): #para cada aventureiro vivo
+        iniciativa, ataque = input().split()
+        ataques.update({personagens[aventureiro] : {"iniciativa" : int(iniciativa), "ataque" : int(ataque)}}) #atualiza o dicionário de ataques
+        
+    ataques_em_ordem = {} #criando o dicionário para ordenar os ataques
+    iniciativas = [] #lista para receber os valores das iniciativas
+    
+    for personagem in ataques:
+        iniciativas.append(ataques[personagem]["iniciativa"])
+    
+    #bubble sorting -> ordenando os ataques
+    n = len(iniciativas)
+    
+    for i in range(n):
+        for j in range(n - i - 1):
+            if iniciativas[j] < iniciativas[j + 1]:
+                iniciativas[j], iniciativas[j + 1] = iniciativas[j + 1], iniciativas[j]
+
+    for valor in iniciativas:
+        for personagem in ataques:
+            if valor == ataques[personagem]["iniciativa"]:
+                ataques_em_ordem.update({personagem : ataques[personagem]})
+
+    print(ataques)
+    print(ataques_em_ordem)
