@@ -19,7 +19,7 @@ def montagem_inventario(string): #função para montar o inventário
     
     for tipo in catalogo: #verificando em qual tipo o item se encaixa para adicionar ao inventário
         if item in catalogo[tipo]:
-            inventario.update({item : {"tipo" : tipo, "poder" : poder_do_item}})
+            inventario.update({item : {"tipo" : tipo, "poder" : int(poder_do_item)}})
     
     return inventario
 
@@ -84,7 +84,7 @@ while quantidade_aventureiros < 1 or quantidade_aventureiros > 4:
 
 for i in range(quantidade_aventureiros): #loop de acordo com a quantidade de aventureiros
     nome, classe = input().split() #recebe o input do nome e da classe do personagem i
-    personagens.append(nome)
+    personagens.append(classe)
     
     #verificando os inputs e separando de acordo com a classe
     if classe == "B":
@@ -120,6 +120,7 @@ for i in range(quantidade_aventureiros): #loop de acordo com a quantidade de ave
                 mago["inventario"].update(montagem_inventario(frase))
 
 #remover até o ==========
+print(personagens)
 print(mago)
 print(guerreiro)
 print(bardo)
@@ -149,12 +150,163 @@ while valor_posicao != 99:
     if ePrimo(valor_posicao): #caiu na armadilha
         tipo_armadilha = input()
 
-        if tipo_armadilha == "flechas": #continuar aqui
-            if "escudo de madeira" in guerreiro["inventario"]:
-                del guerreiro["inventario"]["escudo de madeira"]
-            
-        elif tipo_armadilha == "beholder":
-            pass
+        if tipo_armadilha == "flechas": # se a armadilha for flecha
+            if len(guerreiro) > 0: #verificando se há um guerreiro
+                if "escudo de madeira" in guerreiro["inventario"]: #verificando se o guerreiro tem o escudo
+                    del guerreiro["inventario"]["escudo de madeira"] #se tiver, ele é usado
+                
+                else: #se não o último personagem é morto, caso ele não seja o bardo ou o bardo não tenha a poção de cura
+                    ultimo_personagem = len(personagens - 1)
+                    
+                    if ultimo_personagem >= 0: #verificando se há personagens vivos
+                        if personagens[ultimo_personagem] == "B":
+                            bardo = {}
+                            personagens.pop()
+                        elif personagens[ultimo_personagem] == "G":
+                            if "B" in personagens:
+                                if "pocao de cura" not in bardo["inventario"]:
+                                    guerreiro = {}
+                                    personagens.pop()
+                                else:
+                                    del bardo["inventario"]["pocao de cura"]
+                            else:
+                                guerreiro = {}
+                                personagens.pop()
+                        elif personagens[ultimo_personagem] == "L":
+                            if "B" in personagens:
+                                if "pocao de cura" not in bardo["inventario"]:
+                                    ladino = {}
+                                    personagens.pop()
+                                else:
+                                    del bardo["inventario"]["pocao de cura"]
+                            else:
+                                ladino = {}
+                                personagens.pop()
+                            
+                        elif personagens[ultimo_personagem] == "M":
+                            if "B" in personagens:
+                                if "pocao de cura" not in bardo["inventario"]:
+                                    mago = {}
+                                    personagens.pop()
+                                else:
+                                    del bardo["inventario"]["pocao de cura"]
+                            else:
+                                mago = {}
+                                personagens.pop()
+            else:
+                ultimo_personagem = len(personagens - 1)
+                
+                if ultimo_personagem >= 0: #verificando se há personagens vivos
+                    if personagens[ultimo_personagem] == "B":
+                        bardo = {}
+                        personagens.pop()
+                    elif personagens[ultimo_personagem] == "G":
+                        if "B" in personagens:
+                            if "pocao de cura" not in bardo["inventario"]:
+                                guerreiro = {}
+                                personagens.pop()
+                            else:
+                                del bardo["inventario"]["pocao de cura"]
+                        else:
+                            guerreiro = {}
+                            personagens.pop()
+                    elif personagens[ultimo_personagem] == "L":
+                        if "B" in personagens:
+                            if "pocao de cura" not in bardo["inventario"]:
+                                ladino = {}
+                                personagens.pop()
+                            else:
+                                del bardo["inventario"]["pocao de cura"]
+                        else:
+                            ladino = {}
+                            personagens.pop()
+                        
+                    elif personagens[ultimo_personagem] == "M":
+                        if "B" in personagens:
+                            if "pocao de cura" not in bardo["inventario"]:
+                                mago = {}
+                                personagens.pop()
+                            else:
+                                del bardo["inventario"]["pocao de cura"]
+                        else:
+                            mago = {}
+                            personagens.pop()              
+                
+        elif tipo_armadilha == "beholder": #se a armadilha for o beholder
+            if "L" in personagens: #verificando se o ladino está nos personagens
+                if "bomba de fumaca" in ladino["inventario"]: #verificando se o ladino tem a bomba de fumaça
+                    del ladino["inventario"]["bomba de fumaca"]
+                else:
+                    personagens = []
+            else:
+                personagens = []
 
-    if quadradoPerfeito(valor_posicao): #sala de looting
-        pass
+    if quadradoPerfeito(valor_posicao) and personagens != []: #sala de looting
+        itens_especiais = {"B" : "lira encantada", "G" : "martelo do trovao", "L" : "olho do abismo", "M" : "orbe arcano"} #Itens especiais e classes ideais
+        codigo = {0 : "B", 1 : "G", 2 : "L", 3 : "M"} #para a consulta da ordem lexicográfica
+        
+        item_especial, cod_inventario = input().split(" - ") #recebendo o input da sala
+        
+        personagens_vivos = len(personagens)
+        calculo = int(cod_inventario) % personagens_vivos
+        
+        personagem_selecionado = codigo[calculo]
+        
+        classe_ideal = False
+        
+        if item_especial == itens_especiais[personagem_selecionado]: #verificando se o item vai combinar com a classe ideal
+            classe_ideal = True
+        
+        multiplicador = 1 #ajustando o multiplicador de acordo com a classe
+        if classe_ideal:
+            multiplicador += 1
+        else:
+            multiplicador += 0.25
+        
+        if personagem_selecionado == "B": #ajustando o poder de cada item
+            for item in bardo["inventario"]:
+                item["poder"] *= multiplicador
+        elif personagem_selecionado == "G":
+            for item in guerreiro["inventario"]:
+                item["poder"] *= multiplicador
+        elif personagem_selecionado == "L":
+            for item in ladino["inventario"]:
+                item["poder"] *= multiplicador
+        elif personagem_selecionado == "M":
+            for item in mago["inventario"]:
+                item["poder"] *= multiplicador
+            
+        if "L" in personagens: #verificando se há o ladino
+            if "ferramentas de ladrao" in ladino["inventario"]: #verificando se ele tem as ferramentas no inventário
+                item_especial, cod_inventario = input().split(" - ") #recebendo o input especial da sala
+                del ladino["inventario"]["ferramentas de ladrao"] #deleta a ferramenta
+                personagens_vivos = len(personagens)
+                calculo = int(cod_inventario) % personagens_vivos
+                
+                personagem_selecionado = codigo[calculo]
+                
+                classe_ideal = False
+                
+                if item_especial == itens_especiais[personagem_selecionado]: #verificando se o item vai combinar com a classe ideal
+                    classe_ideal = True
+                
+                multiplicador = 1 #ajustando o multiplicador de acordo com a classe
+                if classe_ideal:
+                    multiplicador += 1
+                else:
+                    multiplicador += 0.25
+                
+                if personagem_selecionado == "B": #ajustando o poder de cada item
+                    for item in bardo["inventario"]:
+                        item["poder"] *= multiplicador
+                elif personagem_selecionado == "G":
+                    for item in guerreiro["inventario"]:
+                        item["poder"] *= multiplicador
+                elif personagem_selecionado == "L":
+                    for item in ladino["inventario"]:
+                        item["poder"] *= multiplicador
+                elif personagem_selecionado == "M":
+                    for item in mago["inventario"]:
+                        item["poder"] *= multiplicador
+                        
+#final boss        
