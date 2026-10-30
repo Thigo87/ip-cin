@@ -304,12 +304,21 @@ while valor_posicao != 99 and len(personagens) > 0:
                 print(f"{ladino['nome']} arrombou o baú trancado!")
         
         itens_especiais = {"B" : "lira encantada", "G" : "martelo do trovao", "L" : "olho do abismo", "M" : "orbe arcano"} #Itens especiais e classes ideais
-        codigo = {0 : "B", 1 : "G", 2 : "L", 3 : "M"} #para a consulta da ordem lexicográfica
+        codigo = {} #para a consulta da ordem lexicográfica
+        personagens_vivos = personagens
+        n = len(personagens_vivos)
+        
+        for i in range(n):
+            for j in range(n - i - 1):
+                if personagens_vivos[j] > personagens_vivos[j + 1]:
+                    personagens_vivos[j], personagens_vivos[j + 1] = personagens_vivos[j + 1], personagens_vivos[j]
+        
+        for i in range(n):
+            codigo.update({i : personagens_vivos[i]})
         
         item_especial, cod_inventario = input().split(" - ") #recebendo o input da sala
         
-        personagens_vivos = len(personagens)
-        calculo = int(cod_inventario) % personagens_vivos
+        calculo = int(cod_inventario) % n
         
         personagem_selecionado = codigo[calculo]
         
@@ -484,14 +493,14 @@ if personagens != []: #verificando se há personagens vivos
             critico = True
         if alaude and ataque == "B": #verificando se o alaude está no inventário e é o bardo
             print(f"{bardo['nome']} inspirou o grupo.")
-            bonus += 2
+            bonus = 2
             vez_bardo = True
         else: #se não for o bardo ou não houver o alaude
             if vez_bardo: #caso tenha o alaude e o bardo já tenha passado
                 if ataque == "G" or ataque == "L": #se for ladino ou guerreiro
                     ataques_em_ordem[ataque]['ataque'] += bonus
 
-        if ataques_em_ordem[ataque]["ataque"] + bonus  >= final_boss["ca"] and final_boss["hp"] > 0:
+        if ((ataques_em_ordem[ataque]["ataque"] >= final_boss["ca"]) or critico) and final_boss["hp"] > 0:
             nome = ""
             arma = ""
             poder = 0
@@ -556,7 +565,7 @@ if personagens != []: #verificando se há personagens vivos
                     poder *= 2
 
             final_boss["hp"] -= poder #ataque
-
+            
             if critico:
                 print(f"{nome} acertou um critico e causou {poder} de dano.")
             else:
@@ -566,14 +575,15 @@ if personagens != []: #verificando se há personagens vivos
                 print(f"O TarraByte foi derrotado por {nome}!")
 
         else:
-            if ataque == "B" and not alaude:
-                print(f"{bardo['nome']} errou o ataque.")
-            if ataque == "M":
-                print(f"{mago['nome']} errou o ataque.")
-            if ataque == "G":
-                print(f"{guerreiro['nome']} errou o ataque.")
-            if ataque == "L":
-                print(f"{ladino['nome']} errou o ataque.")
+            if final_boss["hp"] > 0:
+                if ataque == "B" and not alaude:
+                    print(f"{bardo['nome']} errou o ataque.")
+                if ataque == "M":
+                    print(f"{mago['nome']} errou o ataque.")
+                if ataque == "G":
+                    print(f"{guerreiro['nome']} errou o ataque.")
+                if ataque == "L":
+                    print(f"{ladino['nome']} errou o ataque.")
 
     if final_boss["hp"] > 0:
         print(f"O TarraByte sobreviveu com {final_boss['hp']} de HP e obliterou o grupo. Fim da aventura.")
