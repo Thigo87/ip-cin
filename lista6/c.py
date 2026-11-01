@@ -1,5 +1,8 @@
 def avaliacao_energia(num):
-    pass
+    if num == 0:
+        return 1
+    else:
+        return
 
 def avaliacao_brilho(num):
     pass
