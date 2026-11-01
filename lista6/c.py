@@ -1,17 +1,13 @@
 def avaliacao_energia(num):
     if num == 0:
-        return (1, 1)
+        return ((1, 1), 1)
     elif num == 1:
-        return (1, 3)
+        return ((1, 3), (1/3) + 1)
     else:
-        return (avaliacao_energia(num - 1)[1], (2 * avaliacao_energia(num - 1)[1]) + avaliacao_energia(num - 2)[1])
-
-def avaliacao_brilho(num):
-    if num == 0:
-        return 1
-    else:
-        return (avaliacao_energia(num)[0]/avaliacao_energia(num)[1]) + avaliacao_brilho(num - 1)
-
+        n = avaliacao_energia(num - 1)[0][1]
+        d = (2 * avaliacao_energia(num - 1)[0][1]) + avaliacao_energia(num - 2)[0][1]
+        return ((n, d), (n/d) + avaliacao_energia(num - 1)[1])
+    
 n = int(input())
 
 print("SISTEMA DE CALIBRAGEM DA ÁRVORE QUÂNTICA DE NATAL\nOficina Central do Papai Noel - Setor de Engenharia Fractal v1.0")
@@ -23,8 +19,8 @@ print("[AGUARDE] Desdobrando a pilha de recursão no núcleo do cristal...")
 print("")
 
 energia_acumulada = avaliacao_energia(n)
-calculo_energia = energia_acumulada[0]/energia_acumulada[1]
-fator_brilho = avaliacao_brilho(n)
+calculo_energia = energia_acumulada[0][0]/energia_acumulada[0][1]
+fator_brilho = avaliacao_energia(n)[1]
 print(f"[RELATÓRIO DE ENERGIA ACUMULADA]\nA soma dos índices de energia do nível 0 até o nível {n} é {fator_brilho:.4f}.")
 print("")
 

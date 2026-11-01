@@ -17,43 +17,46 @@ while palavra != "FIM":
     palavra = input().upper()
     if palavra != "FIM":
         print("🔎 Qual será a próxima pista?")
-        if palavra == "OSSO" and palavra not in palavras_investigadas:
-            palavras_investigadas.append(palavra)
-            validas += 1
-            pontos += 3
-            print(f"✅ Parece que a pista '{palavra}' é um palíndromo!")
-            print("🐶 O osso do Max! O Grinch esteve por aqui! (+3 pontos)")
-        elif palavra == "RADAR" and palavra not in palavras_investigadas:
-            palavras_investigadas.append(palavra)
-            validas += 1
-            pontos += 5
-            print(f"✅ Parece que a pista '{palavra}' é um palíndromo!")
-            print("🛷 O radar do trenó! Estamos na trilha certa! (+5 pontos)")
-        elif palavra == "REVIVER" and palavra not in palavras_investigadas:
-            palavras_investigadas.append(palavra)
-            validas += 1
-            pontos += 10
-            print(f"✅ Parece que a pista '{palavra}' é um palíndromo!")
-            print("💚 Reviver o Natal... será que o Grinch está se arrependendo? (+10 pontos)")
-        elif palavra == "ARARA" and palavra not in palavras_investigadas:
-            palavras_investigadas.append(palavra)
-            pontos -= 4
-            print(f"✅ Parece que a pista '{palavra}' é um palíndromo!")
-            print("🦜 Era uma arara de brinquedo! O Grinch plantou uma pista falsa! (-4 pontos)")
-        elif palavra == "SOS" and palavra not in palavras_investigadas:
-            palavras_investigadas.append(palavra)
-            pontos -= 2
-            print(f"✅ Parece que a pista '{palavra}' é um palíndromo!")
-            print("📻 Era um pedido de socorro falso! O Grinch está nos desviando do caminho! (-2 pontos)")
-        elif reversa(palavra, len(palavra)) == palavra: #verificando se é palíndrome
-            palavras_investigadas.append(palavra)
-            pontos += 1
-            validas += 1
-            print(f"✅ Parece que a pista '{palavra}' é um palíndromo!")
+        if palavra in palavras_investigadas:
+            print("🚫 Pistas repetidas não vão nos ajudar em nada!")
         else:
-            if palavra not in palavras_investigadas:
+            if palavra == "OSSO" and palavra not in palavras_investigadas:
                 palavras_investigadas.append(palavra)
-                print(f"❌ Poxa! Parece que a pista '{palavra}' não nos ajudou muito...")
+                validas += 1
+                pontos += 3
+                print(f"✅ Parece que a pista '{palavra}' é um palíndromo!")
+                print("🐶 O osso do Max! O Grinch esteve por aqui! (+3 pontos)")
+            elif palavra == "RADAR" and palavra not in palavras_investigadas:
+                palavras_investigadas.append(palavra)
+                validas += 1
+                pontos += 5
+                print(f"✅ Parece que a pista '{palavra}' é um palíndromo!")
+                print("🛷 O radar do trenó! Estamos na trilha certa! (+5 pontos)")
+            elif palavra == "REVIVER" and palavra not in palavras_investigadas:
+                palavras_investigadas.append(palavra)
+                validas += 1
+                pontos += 10
+                print(f"✅ Parece que a pista '{palavra}' é um palíndromo!")
+                print("💚 Reviver o Natal... será que o Grinch está se arrependendo? (+10 pontos)")
+            elif palavra == "ARARA" and palavra not in palavras_investigadas:
+                palavras_investigadas.append(palavra)
+                pontos -= 4
+                print(f"✅ Parece que a pista '{palavra}' é um palíndromo!")
+                print("🦜 Era uma arara de brinquedo! O Grinch plantou uma pista falsa! (-4 pontos)")
+            elif palavra == "SOS" and palavra not in palavras_investigadas:
+                palavras_investigadas.append(palavra)
+                pontos -= 2
+                print(f"✅ Parece que a pista '{palavra}' é um palíndromo!")
+                print("📻 Era um pedido de socorro falso! O Grinch está nos desviando do caminho! (-2 pontos)")
+            elif reversa(palavra, len(palavra)) == palavra: #verificando se é palíndrome
+                palavras_investigadas.append(palavra)
+                pontos += 1
+                validas += 1
+                print(f"✅ Parece que a pista '{palavra}' é um palíndromo!")
+            else:
+                if palavra not in palavras_investigadas:
+                    palavras_investigadas.append(palavra)
+                    print(f"❌ Poxa! Parece que a pista '{palavra}' não nos ajudou muito...")
 
 print("📁 Parece que a investigação terminou!")
 print("")
@@ -69,7 +72,7 @@ if len(palavras_investigadas) == 0:
     print("Sem pistas, sem caso! O Grinch está rindo lá do Monte Crumpit... 😈")
 elif validas == 0:
     print("Nenhuma pista válida! O Grinch fugiu levando até o último enfeite! 💨")
-elif ("OSSO" and "RADAR" and "REVIVER") in palavras_investigadas and ("ARARA" and "SOS") not in palavras_investigadas:
+elif ("OSSO" and "RADAR" and "REVIVER") in palavras_investigadas:
     print("Caso encerrado! O coração do Grinch cresceu três tamanhos e ele devolveu os presentes! 🎅💚")
 elif (validas/len(palavras_investigadas)) >= 0.75:
     print("Estamos quase lá! O Grinch já está ouvindo os cantos de Natal da Vila! 🎶")
