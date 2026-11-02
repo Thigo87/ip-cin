@@ -1,18 +1,10 @@
-def avaliacao_energia(num):
-    if num == 0:
-        return (1, 1)
-    elif num == 1:
-        return (1, 3)
+def laplace(matriz):
+    if len(matriz[0]) == 1:
+        return matriz[0]
+    elif len(matriz[0]) == 2:
+        return (matriz[0][0] * matriz[1][1]) - (matriz[0][1] * matriz[1][0])
     else:
-        return (avaliacao_energia(num - 1)[1], (2 * avaliacao_energia(num - 1)[1]) + avaliacao_energia(num - 2)[1])
-    
-def avaliacao_brilho(num):
-    if num == 0:
-        return 1
-    else:
-        return (avaliacao_energia(num)[0]/avaliacao_energia(num)[1]) + avaliacao_brilho(num - 1)
-
-print(avaliacao_energia(5))
-print(avaliacao_brilho(3))
-
-print(7/17)
+        print("laplace")
+        
+matriz = [[1,2,3],[4,5,6],[7,8,9]]
+print(laplace(matriz))
