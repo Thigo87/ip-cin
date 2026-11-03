@@ -1,14 +1,18 @@
-def movimentoValido(peca, origem, destino):
-    if peca.lower() == "p":
-        if peca == "P" and origem[0] == 6 and (destino[0] == 5 or destino[0] == 4):
-            return True
-        elif peca == "p" and origem[0] == 1 and (destino[0] == 2 or destino[0] == 3):
-            return True
-        else:
-            if destino[0] - origem[0] == 1:
+def movimentoValido(peca, origem, destino, jogador, dict_jogador):
+    if peca.isupper() and jogador == "N":
+        if peca == "P": #só falta fazer a captura
+            print(dict_jogador[peca][destino[1]])
+            if origem[1] == destino[1]:
+                print("passou")
                 return True
             else:
                 return False
+        elif peca == "T":
+            pass
+    elif peca.islower() and jogador == "C":
+        pass
+    else:
+        return False
             
 def xadrez(jogador, origem, destino, jogador_anterior, rei_capturado, dict_pecas_n, dict_pecas_j):
     if jogador == jogador_anterior or rei_capturado:
@@ -17,9 +21,18 @@ def xadrez(jogador, origem, destino, jogador_anterior, rei_capturado, dict_pecas
         else:
             print("Perdeu por insistencia")
     else:
-        movimento = ("Digite o destino: ")
+        movimento = input("Digite o destino: ")
         x, y = movimento.split()
-        movimentoValido("P", origem, destino)
+        coordenada = [6, 5]
+        if movimentoValido("P", coordenada, [int(x), int(y)], jogador, dict_pecas_n):
+            nova_coordenada = [int(x), int(y)]
+            for peca in dict_pecas_n:
+                if coordenada in dict_pecas_n[peca]:
+                    print(dict_pecas_n[peca])             
+                    dict_pecas_n[peca].pop(coordenada[1])
+                    dict_pecas_n[peca].append(nova_coordenada)
+
+            verTabuleiro(dict_pecas_n, dict_pecas_j)
 
 def verTabuleiro(j1, j2): #funcao de teste
     xadrez = []
@@ -56,3 +69,5 @@ pecas_j = {"p":[[1,0],[1,1],[1,2],[1,3],[1,4],[1,5],[1,6],[1,7]],
             "r" : [[0,4]]}
 
 verTabuleiro(pecas_n, pecas_j)
+
+xadrez("N", 0, 0, 1, False, pecas_n, pecas_j)
