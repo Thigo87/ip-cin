@@ -1,4 +1,6 @@
 def movimentoValido(peca, origem, destino, jogador, dict_jogador):
+    print(origem)
+    print(destino)
     if peca.isupper() and jogador == "N":
         if peca == "P": #só falta fazer a captura
             print(dict_jogador[peca][destino[1]])
