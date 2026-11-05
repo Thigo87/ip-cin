@@ -1,73 +1,124 @@
-def movimentoValido(peca, origem, destino, jogador, dict_jogador):
-    if peca.isupper() and jogador == "N":
-        if peca == "P": #só falta fazer a captura
-            print(dict_jogador[peca][destino[1]])
-            if origem[1] == destino[1]:
-                print("passou")
-                return True
-            else:
-                return False
-        elif peca == "T":
-            pass
-    elif peca.islower() and jogador == "C":
-        pass
-    else:
-        return False
-            
-def xadrez(jogador, origem, destino, jogador_anterior, rei_capturado, dict_pecas_n, dict_pecas_j):
-    if jogador == jogador_anterior or rei_capturado:
-        if rei_capturado:
-            print("Xeque-mate")
-        else:
-            print("Perdeu por insistencia")
-    else:
-        movimento = input("Digite o destino: ")
-        x, y = movimento.split()
-        coordenada = [6, 5]
-        if movimentoValido("P", coordenada, [int(x), int(y)], jogador, dict_pecas_n):
-            nova_coordenada = [int(x), int(y)]
-            for peca in dict_pecas_n:
-                if coordenada in dict_pecas_n[peca]:
-                    print(dict_pecas_n[peca])             
-                    dict_pecas_n[peca].pop(coordenada[1])
-                    dict_pecas_n[peca].append(nova_coordenada)
-
-            verTabuleiro(dict_pecas_n, dict_pecas_j)
-
-def verTabuleiro(j1, j2): #funcao de teste
-    xadrez = []
+def verMapa(tabuleiro):
+    mapa = []
 
     for i in range(8):
         nova_linha = []
-        for j in range(8):
+        for i in range(8):
             nova_linha.append(".")
-        xadrez.append(nova_linha)
+        mapa.append(nova_linha)
 
-    for peca in j1:
-        for coordenada in j1[peca]:
-            xadrez[coordenada[0]][coordenada[1]] = peca
+    for jogador in tabuleiro:
+        for peca in tabuleiro[jogador]:
+            for coordenada in tabuleiro[jogador][peca]:
+                i = coordenada[0]
+                j = coordenada[1]
+                mapa[i][j] = peca
 
-    for peca in j2:
-        for coordenada in j2[peca]:
-            xadrez[coordenada[0]][coordenada[1]] = peca
-
-    for linha in xadrez:
+    for linha in mapa:
         print(linha)
 
-pecas_n = {"P":[[6,0],[6,1],[6,2],[6,3],[6,4],[6,5],[6,6],[6,7]],
-           "T" : [[7,0], [7,7]], 
-           "C" : [[7,1], [7,6]], 
-           "B" : [[7,2], [7,5]],
-           "D" : [[7,3]],
-           "R" : [[7,4]]}
+def movimentar(tabuleiro, jogador, origem, destino): #essa função vai retornar o tabuleiro atualizado com as peças devidamente movimentadas
+    for player in tabuleiro:
+        if player == jogador: 
+            for peca in tabuleiro[jogador]:
+                for coordenada in tabuleiro[jogador][peca]:
+                    if coordenada == origem:
+                        tabuleiro[jogador][peca].remove(coordenada)
+                        tabuleiro[jogador][peca].append(destino)
 
-pecas_j = {"p":[[1,0],[1,1],[1,2],[1,3],[1,4],[1,5],[1,6],[1,7]],
-            "t" : [[0,0], [0,7]], 
-            "c" : [[0,1], [0,6]], 
-            "b" : [[0,2], [0,5]],
-            "d" : [[0,3]],
-            "r" : [[0,4]]}
+    return tabuleiro
 
-verTabuleiro(pecas_n, pecas_j)
+def movimentoValido(tabuleiro, peca, origem, destino): #função para verificar se o movimento é válido
+    elemento_no_destino = "."
 
-xadrez("N", 0, 0, 1, False, pecas_n, pecas_j)
+    #criar um if para verificar se o movimento ocorreu dentro do tabuleiro
+
+    if (0 < origem[0] < 8) and (0 < origem[1] < 8) and (0 < destino[0] < 8) and (0 < destino[1] < 8):
+        #verificando se o destino está vazio ou há alguma peça
+        for player in tabuleiro:
+            for item in tabuleiro[player]:
+                for coordenada in tabuleiro[player][item]:
+                    if coordenada == destino:
+                        elemento_no_destino = item
+
+        print(elemento_no_destino)
+        
+        if peca == "P" and (elemento_no_destino.islower() or elemento_no_destino == "."):
+            if destino[1] == origem[1]:
+                if origem[0] == 6 and (destino[0] == 5 or destino[0] == 4): #movimento do inicio
+                    return True
+                if destino[0] == origem[0] - 1:
+                    return True
+                else:
+                    return False
+
+            #captura -> ajustar aqui
+            elif (destino[0] == origem[0] + 1 and ((destino[1] == origem[1] + 1) or (destino[1] == origem[1] - 1))) and elemento_no_destino.islower():
+                return True
+                    
+            return False
+        
+        elif peca == "p" and (elemento_no_destino.isupper() or elemento_no_destino == "."):
+            if destino[1] == origem[1]:
+                if origem[0] == 1 and (destino[0] == 2 or destino[0] == 3): #movimento do inicio
+                    return True
+                if destino[0] == origem[0] + 1:
+                    return True
+                else:
+                    return False
+
+            #captura    
+            elif destino[0] == origem[0] + 1 and ((destino[1] == origem[1] + 1) or (destino[1] == origem[1] - 1)):
+                return True
+                    
+            return False
+        elif peca == "T" and (elemento_no_destino.islower() or elemento_no_destino == "."):
+            pass
+        elif peca == "t" and (elemento_no_destino.isupper() or elemento_no_destino == "."):
+            pass
+        elif peca == "C" and (elemento_no_destino.islower() or elemento_no_destino == "."):
+            pass
+        elif peca == "c" and (elemento_no_destino.isupper() or elemento_no_destino == "."):
+            pass
+        elif peca == "B" and (elemento_no_destino.islower() or elemento_no_destino == "."):
+            pass
+        elif peca == "b" and (elemento_no_destino.isupper() or elemento_no_destino == "."):
+            pass
+        elif peca == "D" and (elemento_no_destino.islower() or elemento_no_destino == "."):
+            pass
+        elif peca == "d" and (elemento_no_destino.isupper() or elemento_no_destino == "."):
+            pass
+        elif peca == "R" and (elemento_no_destino.islower() or elemento_no_destino == "."):
+            pass
+        elif peca == "r" and (elemento_no_destino.isupper() or elemento_no_destino == "."):
+            pass
+
+    else:
+        return False
+
+tabuleiro = {
+    "N": {
+        "T": [[7, 0], [7, 7]],
+        "C": [[7, 1], [7, 6]],
+        "B": [[7, 2], [7, 5]],
+        "D": [[7, 3]],
+        "R": [[7, 4]],
+        "P": [[6, 0], [6, 1], [6, 2], [6, 3], [6, 4], [6, 5], [6, 6], [6, 7]],
+    },
+    "C": {
+        "t": [[0, 0], [0, 7]],
+        "c": [[0, 1], [0, 6]],
+        "b": [[0, 2], [5, 6]],
+        "d": [[0, 3]],
+        "r": [[0, 4]],
+        "p": [[1, 0], [1, 1], [1, 2], [1, 3], [1, 4], [1, 5], [1, 6], [1, 7]],
+    },
+}
+
+
+verMapa(tabuleiro)
+
+tabuleiro_novo = movimentar(tabuleiro, "N", [6, 2], [5, 2])
+
+verMapa(tabuleiro_novo)
+print(movimentoValido(tabuleiro, "P", [6,5], [5, 6]))
