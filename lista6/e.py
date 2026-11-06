@@ -17,16 +17,6 @@ def verMapa(tabuleiro):
     for linha in mapa:
         print(linha)
 
-def movimentar(tabuleiro, jogador, origem, destino): #essa função vai retornar o tabuleiro atualizado com as peças devidamente movimentadas
-    for player in tabuleiro:
-        if player == jogador: 
-            for peca in tabuleiro[jogador]:
-                for coordenada in tabuleiro[jogador][peca]:
-                    if coordenada == origem:
-                        tabuleiro[jogador][peca].remove(coordenada)
-                        tabuleiro[jogador][peca].append(destino)
-
-    return tabuleiro
 
 def movimentoValido(tabuleiro, peca, origem, destino): #função para verificar se o movimento é válido
     elemento_no_destino = "."
@@ -41,7 +31,6 @@ def movimentoValido(tabuleiro, peca, origem, destino): #função para verificar 
                     if coordenada == destino:
                         elemento_no_destino = item
 
-        print(elemento_no_destino)
 
         if peca == "P" and (elemento_no_destino.islower() or elemento_no_destino == "."):
             if destino[1] == origem[1]:
@@ -97,6 +86,18 @@ def movimentoValido(tabuleiro, peca, origem, destino): #função para verificar 
     else:
         return False
 
+def movimentar(tabuleiro, jogador, origem, destino): #essa função vai retornar o tabuleiro atualizado com as peças devidamente movimentadas
+    for player in tabuleiro:
+        if player == jogador: 
+            for peca in tabuleiro[jogador]:
+                for coordenada in tabuleiro[jogador][peca]:
+                    if coordenada == origem:
+                        if movimentoValido(tabuleiro, peca, origem, destino):
+                            tabuleiro[jogador][peca].remove(coordenada)
+                            tabuleiro[jogador][peca].append(destino)
+
+    return tabuleiro
+
 tabuleiro = {
     "N": {
         "T": [[7, 0], [7, 7]],
@@ -122,4 +123,3 @@ verMapa(tabuleiro)
 tabuleiro_novo = movimentar(tabuleiro, "N", [6, 2], [5, 2])
 print('\n')
 verMapa(tabuleiro_novo)
-print(movimentoValido(tabuleiro, "p", [1,4], [2, 5]))
