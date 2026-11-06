@@ -42,7 +42,7 @@ def movimentoValido(tabuleiro, peca, origem, destino): #função para verificar 
                         elemento_no_destino = item
 
         print(elemento_no_destino)
-        
+
         if peca == "P" and (elemento_no_destino.islower() or elemento_no_destino == "."):
             if destino[1] == origem[1]:
                 if origem[0] == 6 and (destino[0] == 5 or destino[0] == 4): #movimento do inicio
@@ -52,8 +52,8 @@ def movimentoValido(tabuleiro, peca, origem, destino): #função para verificar 
                 else:
                     return False
 
-            #captura -> ajustar aqui
-            elif (destino[0] == origem[0] + 1 and ((destino[1] == origem[1] + 1) or (destino[1] == origem[1] - 1))) and elemento_no_destino.islower():
+            #captura
+            elif (destino[0] == (origem[0] - 1) and ((destino[1] == origem[1] + 1) or (destino[1] == origem[1] - 1))) and elemento_no_destino.islower():
                 return True
                     
             return False
@@ -68,10 +68,11 @@ def movimentoValido(tabuleiro, peca, origem, destino): #função para verificar 
                     return False
 
             #captura    
-            elif destino[0] == origem[0] + 1 and ((destino[1] == origem[1] + 1) or (destino[1] == origem[1] - 1)):
+            elif (destino[0] == (origem[0] + 1) and ((destino[1] == origem[1] + 1) or (destino[1] == origem[1] - 1))) and elemento_no_destino.isupper():
                 return True
                     
             return False
+        
         elif peca == "T" and (elemento_no_destino.islower() or elemento_no_destino == "."):
             pass
         elif peca == "t" and (elemento_no_destino.isupper() or elemento_no_destino == "."):
@@ -108,7 +109,7 @@ tabuleiro = {
     "C": {
         "t": [[0, 0], [0, 7]],
         "c": [[0, 1], [0, 6]],
-        "b": [[0, 2], [5, 6]],
+        "b": [[0, 2], [0, 5]],
         "d": [[0, 3]],
         "r": [[0, 4]],
         "p": [[1, 0], [1, 1], [1, 2], [1, 3], [1, 4], [1, 5], [1, 6], [1, 7]],
@@ -119,6 +120,6 @@ tabuleiro = {
 verMapa(tabuleiro)
 
 tabuleiro_novo = movimentar(tabuleiro, "N", [6, 2], [5, 2])
-
+print('\n')
 verMapa(tabuleiro_novo)
-print(movimentoValido(tabuleiro, "P", [6,5], [5, 6]))
+print(movimentoValido(tabuleiro, "p", [1,4], [2, 5]))
