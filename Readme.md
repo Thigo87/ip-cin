@@ -1,9 +1,9 @@
 # Introdução à Programação (CIN0001) · CIn-UFPE
 
-🇧🇷 Português | 🇺🇸 English — clique para expandir / click to expand
+<img src="https://flagcdn.com/w20/br.png" width="20" alt="BR"> Português &nbsp;|&nbsp; <img src="https://flagcdn.com/w20/us.png" width="20" alt="US"> English — clique para expandir / click to expand
 
 <details open>
-<summary><b>🇧🇷 Português</b></summary>
+<summary><img src="https://flagcdn.com/w20/br.png" width="20" alt="BR"> <b>Português</b></summary>
 
 <br>
 
@@ -67,7 +67,7 @@ Este repositório foi criado com fins de estudo. Se você está cursando a disci
 </details>
 
 <details>
-<summary><b>🇺🇸 English</b></summary>
+<summary><img src="https://flagcdn.com/w20/us.png" width="20" alt="US"> <b>English</b></summary>
 
 <br>
 
